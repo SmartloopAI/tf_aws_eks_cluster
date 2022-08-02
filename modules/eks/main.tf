@@ -1,4 +1,3 @@
-
 locals {
   eks_managed_node_groups = { for k, v in var.node_groups : k => {
     ami_type         = v.ami_type
@@ -25,7 +24,6 @@ locals {
   } }
 }
 
-
 resource "aws_security_group" "node_groups_sg" {
   name = "${var.cluster_name}-nodegroups-security"
 }
@@ -41,8 +39,6 @@ resource "aws_security_group_rule" "node_groups_sg_rules" {
 
   security_group_id = aws_security_group.node_groups_sg.id
 }
-
-
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
