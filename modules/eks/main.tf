@@ -16,7 +16,7 @@ locals {
     }
     }
   }
-  node_addional_security_group_rules = { for k, v in var.node_sg_rules : k => {
+  security_group_rules = { for k, v in var.node_sg_rules : k => {
     description = "${v.type} security group rules for port ${v.port}"
     type        = v.type
     from_port   = v.port
@@ -24,6 +24,25 @@ locals {
     protocol    = v.protocol
   } }
 }
+
+
+resource "aws_security_group" "node_groups_sg" {
+  name = "${var.cluster_name}-nodegroups-security"
+}
+
+resource "aws_security_group_rule" "node_groups_sg_rules" {
+  for_each  = local.security_group_rules
+  type      = each.value.type
+  from_port = each.value.from_port
+  to_port   = each.value.to_port
+  protocol  = each.value.protocol
+
+  cidr_blocks = [data.aws_vpc.this.cidr_block]
+
+  security_group_id = aws_security_group.node_groups_sg.id
+}
+
+
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
@@ -34,11 +53,31 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = concat(var.private_subnet_ids, var.public_subnet_ids)
 
+  cluster_security_group_id = aws_security_group.node_groups_sg.id
+
   manage_aws_auth_configmap = true
 
   aws_auth_users = var.map_users
 
-  node_security_group_additional_rules = local.node_addional_security_group_rules
+  node_security_group_additional_rules = {
+    ingress_self_all = {
+      description = "Node to node all ports/protocols"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      self        = true
+    }
+    egress_all = {
+      description      = "Node all egress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "egress"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
+  }
 
   eks_managed_node_group_defaults = {
     instance_types = var.instance_types

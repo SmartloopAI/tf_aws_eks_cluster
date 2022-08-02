@@ -59,39 +59,12 @@ variable "node_sg_rules" {
     type     = string
     port     = string
     protocol = string
-    self     = bool
   }))
   default = {
-    "ingress_nfs" = {
-      port     = "2049"
+    "argo_cd" = {
+      port     = "8080"
       protocol = "tcp"
       type     = "ingress"
-      self     = false
     },
-    "ingress_http" = {
-      port     = "80"
-      protocol = "tcp"
-      type     = "ingress"
-      self     = false
-    },
-    "ingress_https" = {
-      port     = "443"
-      protocol = "tcp"
-      type     = "ingress"
-      self     = false
-    },
-    "ingress_self_all" = {
-      description = "Node to node all ports/protocols"
-      protocol    = "-1"
-      port        = "0"
-      type        = "ingress"
-      self        = true
-    }
-    "egress_all" = {
-      port     = "0"
-      protocol = "-1"
-      type     = "egress"
-      self     = false
-    }
   }
 }

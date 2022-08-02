@@ -60,7 +60,6 @@ variable "node_sg_rules" {
     type     = string
     port     = string
     protocol = string
-    self     = bool
   }))
 }
 
