@@ -37,7 +37,7 @@ variable "node_groups" {
     disk_size        = string
     instance_types   = list(string)
     k8s_labels       = map(string)
-    min_size = string
+    min_size         = string
   }))
   description = "nodegroup definition"
 
@@ -45,7 +45,7 @@ variable "node_groups" {
     "node" = {
       ami_type         = "AL2_x86_64"
       desired_capacity = "1"
-      min_size = "1"
+      min_size         = "1"
       disk_size        = "20"
       instance_types   = ["m5.xlarge"]
       k8s_labels = {

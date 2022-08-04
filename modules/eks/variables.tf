@@ -50,7 +50,7 @@ variable "node_groups" {
     disk_size        = string
     instance_types   = list(string)
     k8s_labels       = map(string)
-    min_size = string
+    min_size         = string
   }))
   description = "nodegroup definition"
 }
