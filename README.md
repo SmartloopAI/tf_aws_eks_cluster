@@ -1,6 +1,6 @@
 ## tf_aws_eks_cluster
 
-The terraform plan is to create `eks` cluster, node-groups and boostrap cluster permssions and security groups 
+The terraform plan is to create `eks` cluster, node-groups and bootstrap cluster permssions and security groups 
 
 
 ## Inputs
