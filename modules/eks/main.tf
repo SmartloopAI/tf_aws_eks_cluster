@@ -2,6 +2,7 @@ locals {
   eks_managed_node_groups = { for k, v in var.node_groups : k => {
     ami_type         = v.ami_type
     desired_capacity = v.desired_capacity
+    min_size         = v.min_size
     instance_types   = v.instance_types
     labels           = v.k8s_labels
     block_device_mappings = {
